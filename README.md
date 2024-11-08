@@ -1,2 +1,2 @@
-# rabota
-rabota
+# smoke-cgu trudvsem.ru
+smoke
