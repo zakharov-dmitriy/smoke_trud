@@ -41,13 +41,16 @@ public class TestBase {
         WebDriverManager.chromedriver().setup();
         var options = new ChromeOptions();
         options.addArguments("--start-maximized", "--ignore-certificate-errors"); //"--incognito",
-        //options.setBinary("/var/lib/flatpak/exports/bin/com.google.Chrome"); //принудительно запусткает браузер установленный по другому пути
+
+        //---- установлен chrome через flatpack ----
+        //options.setBinary("/var/lib/flatpak/app/com.google.Chrome/x86_64/stable/c74cbaeb05235d9e7a27c5ffbfeb200843761c3138c3992ac0221d71c3dfb91a/export/bin/com.google.Chrome"); //принудительно запусткает браузер установленный по другому пути
+        //options.addArguments("--no-sandbox", "--disable-dev-shm-usage", "--remote-debugging-port=9222");
+
         //options.addArguments("--headless"); //без браузера
         driver = new ChromeDriver(options);
         initialWindow = driver.getWindowHandle();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
     }
 
     @AfterEach

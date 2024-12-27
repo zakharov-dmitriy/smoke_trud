@@ -71,7 +71,7 @@ public class MainPage extends Page {
     @FindBy(tagName = "h1")
     public WebElement titleCard;
 
-    @FindBy(xpath = "//*[.='Краткосрочная занятость']")
+    @FindBy(xpath = "//a[.='Краткосрочная занятость']")
     public WebElement shortJobTab;
 
     public String messageInCaseOfFailedTest = "Неверная страница";
@@ -174,4 +174,5 @@ public class MainPage extends Page {
 //        wait.until(ExpectedConditions.numberOfWindowsToBe(2)); //ожидание открытия новой вкладки
         return wait.until(driver -> titleCard.getText().contains(text));
     }
+
 }

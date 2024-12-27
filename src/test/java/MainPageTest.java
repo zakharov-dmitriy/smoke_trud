@@ -135,7 +135,9 @@ public class MainPageTest extends TestBase {
         Assertions.assertAll(
                 () -> Assertions.assertEquals("Поиск вакансий", page.header.getBreadcrumbsText(),
                         "Неверная страница"),
-                () -> Assertions.assertTrue(page.titleOnPage("Задания"), "Неверный заголовок страницы")
+                () -> Assertions.assertTrue(page.shortJobTab.getAttribute("class").contains("tabs_active"),
+                        "Неверный таб страницы")
+                //() -> Assertions.assertTrue(page.titleOnPage("Задания"), "Неверный заголовок страницы")
         );
     }
 
