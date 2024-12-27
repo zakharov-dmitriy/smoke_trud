@@ -1,5 +1,6 @@
 package pages;
 
+import org.junit.jupiter.params.provider.Arguments;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -8,6 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class MainPage extends Page {
 
@@ -45,7 +48,9 @@ public class MainPage extends Page {
     public WebElement searchContent;
 
     @FindBy(xpath = "//*[@infoblock-name='Работа для всех']//*[contains(@class, 'card_flexible')]")
-    public List<WebElement> cardBtn;
+    public static List<WebElement> cardBtn;
+
+    //a[contains(@class,"tile-card")]/..
 
     @FindBy(xpath = "(//h3[contains(@class,'search-results-full-card__title')]//a)[1]")
     public WebElement titleVacancyFullCard;
@@ -73,6 +78,9 @@ public class MainPage extends Page {
 
     @FindBy(xpath = "//a[.='Краткосрочная занятость']")
     public WebElement shortJobTab;
+
+    @FindBy(xpath = "//a[contains(@class,\"tile-card\")]/..")
+    public List<WebElement> list;
 
     public String messageInCaseOfFailedTest = "Неверная страница";
 
@@ -116,11 +124,36 @@ public class MainPage extends Page {
         return element.getText();
     }
 
-    public void clickOnCard() {
+    public void clickOnCard(int i) {
 //        for (WebElement webElement : cardBtn) {
 //            jsExecutor.executeScript("arguments[0].click(true)", cardBtn.get(0));
 //        }
-        jsExecutor.executeScript("arguments[0].click(true)", cardBtn.get(0));
+        jsExecutor.executeScript("arguments[0].click(true)", cardBtn.get(i));
+    }
+
+//    public static Stream<Integer> cardIndexProvider() {
+//        // Возвращаем поток индексов от 0 до размера списка cardBtn
+//        return IntStream.range(0, cardBtn.size()).boxed();
+//    }
+
+    public static Stream<Arguments> cardIndexProvider() {
+        return Stream.of(
+                Arguments.of(0, "/information-pages/employment-veterans"),
+                Arguments.of(1,"/information-pages/fareast-job"),
+                Arguments.of(2,"/information-pages/arrivals"),
+                Arguments.of(3,"/information-pages/atlasremoteprof"),
+                Arguments.of(4,"/information-pages/it-residence"),
+                Arguments.of(5,"/students-employment"),
+                Arguments.of(6,"/vacancy/search?page=0&busyType=REMOTE"),
+                Arguments.of(7,"/czn?_page=0&_regionCode=2400000000000"),
+                Arguments.of(8,"/information-pages/special"),
+                Arguments.of(9,"/temporary-jobs"),
+                Arguments.of(10,"/experienced-personnel"),
+                Arguments.of(11,"/information-pages/standard-documents#candidates"),
+                Arguments.of(12,"/private-employment-agency"),
+                Arguments.of(13,"/professions"),
+                Arguments.of(14,"/proforientation")
+        );
     }
 
     public void clickOnTitleVacancyFullCard() {

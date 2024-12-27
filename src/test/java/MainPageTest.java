@@ -1,11 +1,17 @@
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import pages.MainPage;
 import io.qameta.allure.Description;
 import io.qameta.allure.Owner;
 
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 public class MainPageTest extends TestBase {
 
-    private MainPage page;
+    private static MainPage page;
 
     String text = "Повар";
 
@@ -69,23 +75,44 @@ public class MainPageTest extends TestBase {
     }
 
     //@Disabled
-    @Test
+    @ParameterizedTest
+    @MethodSource("pages.MainPage#cardIndexProvider")
+    //@Test
     @Owner("@d.zakharov")
     @Description("Инфоблок \"Работа для всех\"")
     @DisplayName("Открытие карточек в инфоблоке Работа для всех")
-    public void openCardJobsForAll() {
-        page.clickOnCard();
+    public void openCardJobsForAll(int i, String url) {
+        page.clickOnCard(i);
         //assert
         var allWindows = driver.getWindowHandles();
-        var expectedUrl = "/information-pages/employment-veterans";
+//        var expectedUrl = "/information-pages/employment-veterans";
         switchToFirstWindow();
         Assertions.assertAll(
                 () -> Assertions.assertEquals(2, allWindows.size(),
                         "После клика не открылось новое окно"),
-                () -> Assertions.assertTrue(driver.getCurrentUrl().contains(expectedUrl),
+                () -> Assertions.assertTrue(driver.getCurrentUrl().contains(url),
                         "После клика открылась неверная страница")
         );
     }
+
+//    @ParameterizedTest
+//    @MethodSource("pages.MainPage#cardIndexProvider")
+//    @Owner("@d.zakharov")
+//    @Description("Инфоблок \"Работа для всех\"")
+//    @DisplayName("Открытие карточек в инфоблоке Работа для всех")
+//    public void openCardJobsForAll(int index) {
+//        page.clickOnCard(index);
+//        //assert
+//        var allWindows = driver.getWindowHandles();
+//        var expectedUrl = "/information-pages/employment-veterans";
+//        switchToFirstWindow();
+//        Assertions.assertAll(
+//                () -> Assertions.assertEquals(2, allWindows.size(),
+//                        "После клика не открылось новое окно"),
+//                () -> Assertions.assertTrue(driver.getCurrentUrl().contains(expectedUrl),
+//                        "После клика открылась неверная страница")
+//        );
+//    }
 
     @Test
     @Owner("@d.zakharov")
