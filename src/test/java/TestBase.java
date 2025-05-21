@@ -3,12 +3,11 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
@@ -38,16 +37,20 @@ public class TestBase {
 
     @BeforeEach
     public void setUp() {
-        WebDriverManager.chromedriver().setup();
         var options = new ChromeOptions();
-        options.addArguments("--start-maximized", "--ignore-certificate-errors"); //"--incognito",
+        options.addArguments("--start-maximized", "--ignore-certificate-errors");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--remote-debugging-port=9222");
+//        options.addArguments("--incognito");
+//        options.addArguments("--headless"); //без браузера
 
-        //---- установлен chrome через flatpack ----
-        //options.setBinary("/var/lib/flatpak/app/com.google.Chrome/x86_64/stable/c74cbaeb05235d9e7a27c5ffbfeb200843761c3138c3992ac0221d71c3dfb91a/export/bin/com.google.Chrome"); //принудительно запусткает браузер установленный по другому пути
-        //options.addArguments("--no-sandbox", "--disable-dev-shm-usage", "--remote-debugging-port=9222");
+        WebDriverManager.firefoxdriver().setup();
+        driver = new FirefoxDriver();
+//        WebDriverManager.chromedriver().setup();
+//        WebDriverManager.chromedriver().driverVersion("136.0.7103.113").setup();
+//        driver = new ChromeDriver(options);
 
-        //options.addArguments("--headless"); //без браузера
-        driver = new ChromeDriver(options);
         initialWindow = driver.getWindowHandle();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -57,6 +60,31 @@ public class TestBase {
     public void tearDown() throws IOException {
         var sourceFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(sourceFile, new File("./src/test/resources/screens/screen.png"));
-        driver.quit();
+//        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
+
+//    @AfterEach
+//    public void tearDown() throws IOException {
+//        if (driver != null) {
+//            try {
+//                var sourceFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+//                FileUtils.copyFile(sourceFile, new File("./src/test/resources/screens/screen.png"));
+//            } catch (Exception e) {
+//                System.err.println("Не удалось сделать скриншот: " + e.getMessage());
+//            }
+//
+//            try {
+//                driver.quit(); // или driver.close()
+//            } catch (Exception e) {
+//                System.err.println("Ошибка при закрытии драйвера: " + e.getMessage());
+//            }
+//
+//            // Принудительно убей оставшиеся процессы
+//            Runtime.getRuntime().exec("pkill -f chrome");
+//            Runtime.getRuntime().exec("pkill -f chromedriver");
+//        }
+//    }
 }
