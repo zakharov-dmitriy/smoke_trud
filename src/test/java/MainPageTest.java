@@ -20,6 +20,8 @@ public class MainPageTest extends TestBase {
         page = new MainPage(driver, wait);
         page.open();
         page.acceptCookiesAndRegion();
+        System.setProperty("io.netty.noUnsafe", "true");
+        System.setProperty("io.netty.leakDetection.level", "DISABLED");
     }
 
     //    @Disabled

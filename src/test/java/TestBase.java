@@ -37,6 +37,14 @@ public class TestBase {
 
     @BeforeEach
     public void setUp() {
+        // Отключаем подробное логирование WebDriverManager
+        System.setProperty("wdm.logLevel", "WARN");
+        System.setProperty("wdm.printStackTraces", "false");
+        // Отключаем логирование Selenium
+        System.setProperty("webdriver.chrome.silentOutput", "true");
+        System.setProperty("webdriver.http.logger", "off");
+
+
         var options = new ChromeOptions();
         options.addArguments("--start-maximized", "--ignore-certificate-errors");
         options.addArguments("--no-sandbox");
